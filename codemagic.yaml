@@ -3,21 +3,39 @@ workflows:
     name: SquidInjector
     environment:
       vars:
-        JAVA_HOME: /opt/android/openjdk-17
+        SO_FILE_URL: "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
+      android: true
     scripts:
+      - name: Install Java
+        script: |
+          sudo apt-get update
+          sudo apt-get install openjdk-11-jdk -y
+          export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+          java -version
+      - name: Install Gradle
+        script: |
+          sudo apt-get install wget unzip -y
+          wget https://services.gradle.org/distributions/gradle-7.2-bin.zip
+          unzip gradle-7.2-bin.zip
+          export PATH=$PWD/gradle-7.2/bin:$PATH
+          gradle -v
+      - name: Download .so file
+        script: |
+          wget -O libil2cpp.so "$SO_FILE_URL"
+      - name: Move .so file to assets
+        script: |
+          mkdir -p app/src/main/assets
+          mv libil2cpp.so app/src/main/assets/
       - name: Decode gradle-wrapper.jar
         script: |
-          echo "Decoding gradle-wrapper.jar from base64"
+          mkdir -p gradle/wrapper
           base64 -d gradle/wrapper/gradle-wrapper.jar.base64 > gradle/wrapper/gradle-wrapper.jar
           chmod +x gradle/wrapper/gradle-wrapper.jar
-      - name: Download .so file from Google Drive
+      - name: Make gradlew executable
         script: |
-          echo "Downloading libil2cpp.so from Google Drive"
-          wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY' -O libil2cpp.so
+          chmod +x ./gradlew
       - name: Build APK
         script: |
-          echo "Building APK manually"
-          chmod +x ./gradlew
           ./gradlew assembleDebug
     artifacts:
       - app/build/outputs/**/*.apk
