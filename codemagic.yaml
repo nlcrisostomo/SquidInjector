@@ -4,7 +4,6 @@ workflows:
     environment:
       vars:
         JAVA_HOME: /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
-      android: null
     scripts:
       - name: Decode gradle-wrapper.jar
         script: |
