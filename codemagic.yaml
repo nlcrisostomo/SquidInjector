@@ -6,17 +6,19 @@ workflows:
       - name: Decode gradle-wrapper.jar
         script: |
           echo "Decoding gradle-wrapper.jar from base64"
+          mkdir -p gradle/wrapper
           base64 -d gradle/wrapper/gradle-wrapper.jar.base64 > gradle/wrapper/gradle-wrapper.jar
-          chmod +x gradle/wrapper/gradle-wrapper.jar
       - name: Download .so file
         script: |
           echo "Downloading .so file from Google Drive"
           mkdir -p app/src/main/jniLibs/armeabi-v7a/
           curl -L -o app/src/main/jniLibs/armeabi-v7a/libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
+      - name: Set gradlew permissions
+        script: |
+          chmod +x ./gradlew
       - name: Build APK
         script: |
           echo "Building APK"
-          chmod +x gradle/wrapper/gradle-wrapper.jar
           ./gradlew assembleDebug
     artifacts:
       - app/build/outputs/**/*.apk
