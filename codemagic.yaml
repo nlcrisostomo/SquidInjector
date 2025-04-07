@@ -3,7 +3,7 @@ workflows:
     name: Android Build Workflow
     environment:
       vars:
-        JAVA_HOME: /opt/java/openjdk
+        JAVA_HOME: $CM_JAVA_HOME
     scripts:
       - name: Download .so file from Google Drive
         script: |
