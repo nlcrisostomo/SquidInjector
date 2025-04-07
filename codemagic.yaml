@@ -3,7 +3,7 @@ workflows:
     name: SquidInjector
     environment:
       vars:
-        JAVA_HOME: /opt/android/openjdk
+        JAVA_HOME: /opt/android/openjdk-17
     scripts:
       - name: Decode gradle-wrapper.jar
         script: |
