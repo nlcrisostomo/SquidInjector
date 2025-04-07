@@ -1,22 +1,30 @@
 workflows:
   android-workflow:
-    name: Android Workflow
+    name: SquidInjector
     environment:
-      java: 11
+      vars:
+        GAME_LIB_URL: "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
+      java: 17
     scripts:
-      - name: Download libil2cpp.so
-        script: |
-          echo "Downloading libil2cpp.so from Google Drive"
-          wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY' -O libil2cpp.so
       - name: Decode gradle-wrapper.jar
         script: |
-          echo "Decoding gradle-wrapper.jar from base64"
+          mkdir -p gradle/wrapper
           base64 -d gradle/wrapper/gradle-wrapper.jar.base64 > gradle/wrapper/gradle-wrapper.jar
-      - name: Make gradlew executable
+          chmod +x gradle/wrapper/gradle-wrapper.jar
+
+      - name: Download .so file
+        script: |
+          curl -L "$GAME_LIB_URL" -o libil2cpp.so
+          echo ".so file downloaded."
+
+      - name: Prepare build
         script: |
           chmod +x gradlew
+          ./gradlew dependencies
+
       - name: Build APK
         script: |
           ./gradlew assembleDebug
+
     artifacts:
-      - build/app/outputs/flutter-apk/app-debug.apk
+      - app/build/outputs/**/*.apk
