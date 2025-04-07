@@ -1,0 +1,39 @@
+workflows:
+  android-workflow:
+    name: Android Build Workflow
+    max_build_duration: 60
+    environment:
+      vars:
+        PACKAGE_NAME: "com.squidgame.unleashed"
+      android_signing:
+        - keystore_reference
+    scripts:
+      - name: Install tools
+        script: |
+          apt-get update
+          apt-get install -y wget unzip
+
+      - name: Download libil2cpp.so from Google Drive
+        script: |
+          FILE_ID="1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
+          FILE_NAME="libil2cpp.so"
+          CONFIRM=$(wget --quiet --save-cookies cookies.txt --keep-session-cookies --no-check-certificate "https://docs.google.com/uc?export=download&id=${FILE_ID}" -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1/p')
+          wget --load-cookies cookies.txt "https://docs.google.com/uc?export=download&confirm=${CONFIRM}&id=${FILE_ID}" -O ${FILE_NAME}
+          rm -f cookies.txt
+
+      - name: Verify files
+        script: |
+          ls -la
+          echo "global-metadata.dat and libil2cpp.so should be here!"
+
+      - name: Inject and build (placeholder)
+        script: |
+          echo "Injection step will go here"
+          echo "Building APK..."
+
+      - name: Success
+        script: |
+          echo "Build pipeline completed."
+
+artifacts:
+  - build/app/outputs/flutter-apk/app-release.apk
