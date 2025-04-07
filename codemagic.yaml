@@ -1,6 +1,6 @@
 workflows:
-  android-workflow:
-    name: Android Workflow
+  SquidInjector:
+    name: SquidInjector Workflow
     max_build_duration: 60
     environment:
       vars:
