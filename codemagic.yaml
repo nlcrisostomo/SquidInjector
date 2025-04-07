@@ -3,7 +3,7 @@ workflows:
     name: SquidInjector
     environment:
       vars:
-        JAVA_HOME: /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
+        # No need for JAVA_HOME manually, Codemagic uses default Java version.
     scripts:
       - name: Decode gradle-wrapper.jar
         script: |
@@ -18,6 +18,6 @@ workflows:
         script: |
           echo "Building APK"
           chmod +x gradle/wrapper/gradle-wrapper.jar
-          java -jar gradle/wrapper/gradle-wrapper.jar assembleDebug
+          ./gradlew assembleDebug
     artifacts:
       - app/build/outputs/**/*.apk
