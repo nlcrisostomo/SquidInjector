@@ -1,25 +1,17 @@
 workflows:
   android-workflow:
-    name: Android Build Workflow
+    name: Android Workflow
+    environment:
+      vars:
+        JAVA_HOME: /opt/java/openjdk/jdk11
     scripts:
-      - name: Download .so file from Google Drive
-        script: |
-          echo "Downloading libil2cpp.so from Google Drive"
-          curl -L -o libil2cpp.so 'https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY'
-      - name: Move .so file to libs directory
-        script: |
-          mkdir -p android/app/src/main/jniLibs/armeabi-v7a
-          mv libil2cpp.so android/app/src/main/jniLibs/armeabi-v7a/
-      - name: Verify .so file
-        script: |
-          ls -lh android/app/src/main/jniLibs/armeabi-v7a/
       - name: Decode gradle-wrapper.jar
         script: |
-          mkdir -p gradle/wrapper
+          echo "Decoding gradle-wrapper.jar from base64"
           base64 -d gradle/wrapper/gradle-wrapper.jar.base64 > gradle/wrapper/gradle-wrapper.jar
-          chmod +x gradlew
+          chmod +x gradle/wrapper/gradle-wrapper.jar
       - name: Build APK
         script: |
           ./gradlew assembleDebug
     artifacts:
-      - android/app/build/outputs/apk/debug/*.apk
+      - build/app/outputs/flutter-apk/app-debug.apk
