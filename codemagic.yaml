@@ -4,16 +4,11 @@ workflows:
     environment:
       vars:
         SO_FILE_URL: "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
-      android: true
+      java: 11
     scripts:
-      - name: Install Java
-        script: |
-          sudo apt-get update
-          sudo apt-get install openjdk-11-jdk -y
-          export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-          java -version
       - name: Install Gradle
         script: |
+          sudo apt-get update
           sudo apt-get install wget unzip -y
           wget https://services.gradle.org/distributions/gradle-7.2-bin.zip
           unzip gradle-7.2-bin.zip
