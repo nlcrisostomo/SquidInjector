@@ -1,9 +1,7 @@
 workflows:
   SquidInjector:
     name: SquidInjector
-    environment:
-      vars:
-        # No need for JAVA_HOME manually, Codemagic uses default Java version.
+    environment: {}
     scripts:
       - name: Decode gradle-wrapper.jar
         script: |
@@ -13,6 +11,7 @@ workflows:
       - name: Download .so file
         script: |
           echo "Downloading .so file from Google Drive"
+          mkdir -p app/src/main/jniLibs/armeabi-v7a/
           curl -L -o app/src/main/jniLibs/armeabi-v7a/libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
       - name: Build APK
         script: |
