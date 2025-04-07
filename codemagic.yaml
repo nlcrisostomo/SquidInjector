@@ -2,9 +2,12 @@ workflows:
   android-workflow:
     name: Android Workflow
     environment:
-      vars:
-        JAVA_HOME: /opt/java/openjdk/jdk11
+      java: 11
     scripts:
+      - name: Download libil2cpp.so
+        script: |
+          echo "Downloading libil2cpp.so from Google Drive"
+          wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY' -O libil2cpp.so
       - name: Decode gradle-wrapper.jar
         script: |
           echo "Decoding gradle-wrapper.jar from base64"
