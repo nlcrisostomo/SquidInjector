@@ -3,24 +3,22 @@ workflows:
     name: SquidInjector
     environment:
       vars:
-        GOOGLE_DRIVE_URL: "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
-      java: 17
+        JAVA_HOME: /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
+      android: null
     scripts:
-      - name: Download libil2cpp.so from Google Drive
-        script: |
-          echo "Downloading libil2cpp.so from Google Drive..."
-          curl -L -o libil2cpp.so "$GOOGLE_DRIVE_URL"
-
       - name: Decode gradle-wrapper.jar
         script: |
-          echo "Decoding gradle-wrapper.jar from base64..."
+          echo "Decoding gradle-wrapper.jar from base64"
           base64 -d gradle/wrapper/gradle-wrapper.jar.base64 > gradle/wrapper/gradle-wrapper.jar
           chmod +x gradle/wrapper/gradle-wrapper.jar
-
+      - name: Download .so file
+        script: |
+          echo "Downloading .so file from Google Drive"
+          curl -L -o app/src/main/jniLibs/armeabi-v7a/libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
       - name: Build APK
         script: |
-          echo "Building APK..."
-          ./gradlew assembleDebug
-
+          echo "Building APK"
+          chmod +x gradle/wrapper/gradle-wrapper.jar
+          java -jar gradle/wrapper/gradle-wrapper.jar assembleDebug
     artifacts:
-      - app/build/outputs/apk/debug/app-debug.apk
+      - app/build/outputs/**/*.apk
