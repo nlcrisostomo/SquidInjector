@@ -1,34 +1,22 @@
 workflows:
   android-workflow:
-    name: Build SquidInjector APK
+    name: Android Build Workflow
     environment:
-      vars:
-        PACKAGE_NAME: "com.squid.injector"
-        APP_NAME: "SquidInjector"
-      android: latest
+      android: true
     scripts:
       - name: Download .so file from Google Drive
         script: |
-          echo "Downloading libil2cpp.so..."
-          curl -L -o ./libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
-          echo "Downloaded libil2cpp.so"
-
-      - name: Verify global-metadata.dat
+          echo "Downloading libil2cpp.so from Google Drive"
+          curl -L -o libil2cpp.so 'https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY'
+      - name: Move .so file to libs directory
         script: |
-          if [ ! -f ./global-metadata.dat ]; then
-            echo "Error: global-metadata.dat not found in root directory!"
-            exit 1
-          else
-            echo "global-metadata.dat found."
-          fi
-
-      - name: Setup Gradle Wrapper
+          mkdir -p android/app/src/main/jniLibs/armeabi-v7a
+          mv libil2cpp.so android/app/src/main/jniLibs/armeabi-v7a/
+      - name: Verify .so file
         script: |
-          chmod +x ./gradlew
-
-      - name: Build APK (Debug)
+          ls -lh android/app/src/main/jniLibs/armeabi-v7a/
+      - name: Build APK
         script: |
           ./gradlew assembleDebug
-
     artifacts:
-      - app/build/outputs/apk/debug/app-debug.apk
+      - android/app/build/outputs/apk/debug/*.apk
