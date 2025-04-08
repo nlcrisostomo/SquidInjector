@@ -1,18 +1,26 @@
 workflows:
-  SquidInjector:
+  android-workflow:
     name: SquidInjector
+    environment:
+      vars:
+        JAVA_HOME: /opt/android/open-jdk-11
     scripts:
       - name: Step 1 - Download Gradle 7.2
         script: |
-          curl -LO https://services.gradle.org/distributions/gradle-7.2-bin.zip
-          unzip gradle-7.2-bin.zip
+          echo "Downloading Gradle 7.2..."
+          curl -o gradle.zip https://services.gradle.org/distributions/gradle-7.2-bin.zip
+          unzip gradle.zip
           chmod +x gradle-7.2/bin/gradle
+
       - name: Step 2 - Download .so file
         script: |
-          mkdir -p app/libs
+          echo "Downloading .so file..."
           curl -L -o app/libs/libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
+
       - name: Step 3 - Build APK
         script: |
-          gradle-7.2/bin/gradle assembleDebug
+          echo "Building APK..."
+          ./gradle-7.2/bin/gradle assembleDebug
+
     artifacts:
-      - app/build/outputs/apk/debug/app-debug.apk
+      - app/build/outputs/**/*.apk
