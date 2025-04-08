@@ -2,15 +2,15 @@ workflows:
   android-workflow:
     name: SquidInjector Build
     environment:
-      vars:
-        JAVA_HOME: /opt/android/java/openjdk-17
+      android: latest
+      java: 17
     scripts:
-      - echo "Step 1 - Download gradle-wrapper.jar"
-      - mkdir -p gradle/wrapper
-      - curl -L -o gradle/wrapper/gradle-wrapper.jar "https://raw.githubusercontent.com/your-repo-path/gradle-wrapper.jar"
-
-      - echo "Step 2 - Prepare gradlew permissions"
+      - echo "Step 1 - Prepare gradlew permissions"
       - chmod +x ./gradlew
+
+      - echo "Step 2 - Download gradle-wrapper.jar"
+      - mkdir -p gradle/wrapper
+      - curl -L -o gradle/wrapper/gradle-wrapper.jar "https://github.com/YourUsername/YourRepo/raw/main/gradle-wrapper.jar"
 
       - echo "Step 3 - Download .so file"
       - mkdir -p app/libs
