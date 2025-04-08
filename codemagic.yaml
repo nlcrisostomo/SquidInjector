@@ -3,19 +3,23 @@ workflows:
     name: SquidInjector Build
     max_build_duration: 60
     environment:
-      android: latest
+      image: android
       vars:
         JAVA_HOME: /opt/android/openjdk-11
     scripts:
-      - echo "== Step 1: Download Gradle Wrapper =="
-      - mkdir -p gradle/wrapper
-      - curl -L -o gradle/wrapper/gradle-wrapper.jar https://downloads.gradle.org/distributions/gradle-7.2-bin.zip
-      - echo "== Step 2: Download .so file =="
-      - mkdir -p app/libs
-      - curl -L -o app/libs/libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
-      - echo "== Step 3: Set permissions =="
-      - chmod +x gradlew
-      - echo "== Step 4: Build APK =="
-      - ./gradlew assembleDebug --no-daemon --stacktrace
+      - |
+        echo "== Step 1: Download Gradle Wrapper =="
+        mkdir -p gradle/wrapper
+        curl -L -o gradle/wrapper/gradle-wrapper.jar https://downloads.gradle.org/distributions/gradle-7.2-bin.zip
+      - |
+        echo "== Step 2: Download .so file =="
+        mkdir -p app/libs
+        curl -L -o app/libs/libil2cpp.so 'https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY'
+      - |
+        echo "== Step 3: Set permissions =="
+        chmod +x gradlew
+      - |
+        echo "== Step 4: Build APK =="
+        ./gradlew assembleDebug --no-daemon --stacktrace
     artifacts:
       - app/build/outputs/**/*.apk
