@@ -2,18 +2,17 @@ workflows:
   SquidInjector:
     name: SquidInjector
     scripts:
-      - name: Step 1 - Prepare gradlew permissions
+      - name: Step 1 - Download Gradle 7.2
         script: |
-          chmod +x ./gradlew
-      - name: Step 2 - Download gradle-wrapper.jar
-        script: |
-          curl -L -o gradle/wrapper/gradle-wrapper.jar "https://github.com/nlcrisostomo/SquidInjector/raw/main/gradle-wrapper.jar"
-      - name: Step 3 - Download .so file
+          curl -o gradle.zip https://services.gradle.org/distributions/gradle-7.2-bin.zip
+          unzip gradle.zip
+          chmod +x gradle-7.2/bin/gradle
+      - name: Step 2 - Download .so file
         script: |
           mkdir -p app/libs
           curl -L -o app/libs/libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
-      - name: Step 4 - Build APK
+      - name: Step 3 - Build APK
         script: |
-          ./gradlew assembleDebug
+          gradle-7.2/bin/gradle assembleDebug
     artifacts:
       - app/build/outputs/apk/debug/app-debug.apk
