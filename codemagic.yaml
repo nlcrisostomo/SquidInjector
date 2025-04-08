@@ -1,6 +1,7 @@
 workflows:
   android-workflow:
     name: SquidInjector
+    max_build_duration: 120
     scripts:
       - name: Step 1 - Download Gradle 7.2
         script: |
