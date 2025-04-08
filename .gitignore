@@ -1,0 +1,27 @@
+# Gradle
+.gradle
+/build
+/local.properties
+/.idea
+
+# Android Studio
+*.iml
+.idea/
+*.hprof
+
+# Others
+/captures/
+/outputs/
+/.externalNativeBuild/
+
+# Logs
+*.log
+
+# Mac OS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Apk
+*.apk
