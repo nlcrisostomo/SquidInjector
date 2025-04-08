@@ -3,7 +3,6 @@ workflows:
     name: SquidInjector Build
     max_build_duration: 60
     environment:
-      image: android
       vars:
         JAVA_HOME: /opt/android/openjdk-11
     scripts:
