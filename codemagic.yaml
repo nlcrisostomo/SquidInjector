@@ -3,7 +3,7 @@ workflows:
     name: SquidInjector
     environment:
       vars:
-        JAVA_HOME: /opt/android/open-jdk-11
+        JAVA_HOME: /opt/android/openjdk-11
     scripts:
       - name: Step 1 - Download Gradle 7.2
         script: |
@@ -15,6 +15,7 @@ workflows:
       - name: Step 2 - Download .so file
         script: |
           echo "Downloading .so file..."
+          mkdir -p app/libs
           curl -L -o app/libs/libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
 
       - name: Step 3 - Build APK
