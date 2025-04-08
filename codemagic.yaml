@@ -4,11 +4,10 @@ workflows:
     environment:
       java: 17
     scripts:
-      - name: Step 1 - Download gradle-wrapper.jar
+      - name: Step 1 - Download correct gradle-wrapper.jar
         script: |
           mkdir -p gradle/wrapper
-          curl -L -o gradle/wrapper/gradle-wrapper.jar https://services.gradle.org/distributions/gradle-7.2-bin.zip
-          unzip -j gradle/wrapper/gradle-wrapper.jar 'gradle-*/lib/gradle-wrapper.jar' -d gradle/wrapper/
+          curl -L -o gradle/wrapper/gradle-wrapper.jar https://repo1.maven.org/maven2/org/gradle/gradle-wrapper/7.2/gradle-wrapper-7.2.jar
       - name: Step 2 - Prepare gradlew permissions
         script: |
           chmod +x ./gradlew
