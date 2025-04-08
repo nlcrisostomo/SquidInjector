@@ -4,8 +4,8 @@ workflows:
     scripts:
       - name: Step 1 - Download Gradle 7.2
         script: |
-          curl -o gradle.zip https://services.gradle.org/distributions/gradle-7.2-bin.zip
-          unzip gradle.zip
+          curl -LO https://services.gradle.org/distributions/gradle-7.2-bin.zip
+          unzip gradle-7.2-bin.zip
           chmod +x gradle-7.2/bin/gradle
       - name: Step 2 - Download .so file
         script: |
