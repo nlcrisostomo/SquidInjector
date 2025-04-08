@@ -3,7 +3,7 @@ workflows:
     name: SquidInjector
     environment:
       vars:
-        JAVA_HOME: /opt/android/openjdk-11
+        # No JAVA_HOME here to avoid validation and environment errors
     scripts:
       - name: Step 1 - Download Gradle 7.2
         script: |
@@ -21,6 +21,7 @@ workflows:
       - name: Step 3 - Build APK
         script: |
           echo "Building APK..."
+          export JAVA_HOME=/opt/java/openjdk-17
           ./gradle-7.2/bin/gradle assembleDebug
 
     artifacts:
