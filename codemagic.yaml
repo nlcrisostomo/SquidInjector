@@ -4,17 +4,16 @@ workflows:
     environment:
       java: 17
     scripts:
-      - name: Step 1 - Download correct gradle-wrapper.jar
+      - name: Step 1 - Download fresh gradlew and wrapper jar
         script: |
           mkdir -p gradle/wrapper
-          curl -L -o gradle/wrapper/gradle-wrapper.jar https://repo1.maven.org/maven2/org/gradle/gradle-wrapper/7.2/gradle-wrapper-7.2.jar
-      - name: Step 2 - Prepare gradlew permissions
-        script: |
-          chmod +x ./gradlew
-      - name: Step 3 - Download .so file
+          curl -o gradlew https://raw.githubusercontent.com/gradle/gradle/master/gradlew
+          chmod +x gradlew
+          curl -o gradle/wrapper/gradle-wrapper.jar https://repo1.maven.org/maven2/org/gradle/gradle-wrapper/7.2/gradle-wrapper-7.2.jar
+      - name: Step 2 - Download .so file
         script: |
           curl -L -o ./libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
-      - name: Step 4 - Build APK
+      - name: Step 3 - Build APK
         script: |
           ./gradlew assembleDebug
     artifacts:
