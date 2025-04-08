@@ -2,7 +2,8 @@ workflows:
   SquidInjector:
     name: SquidInjector
     environment:
-      JAVA_HOME: /opt/android/java/openjdk-17
+      vars:
+        JAVA_HOME: /opt/android/java/openjdk-17
     scripts:
       - name: Step 1 - Prepare gradlew permissions
         script: |
