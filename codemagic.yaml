@@ -18,7 +18,7 @@ workflows:
       - name: Step 3 - Build APK
         script: |
           echo "Building APK..."
-          export JAVA_HOME=/opt/java/openjdk-17
+          export JAVA_HOME=/opt/android/java/openjdk-11
           ./gradle-7.2/bin/gradle assembleDebug
 
     artifacts:
