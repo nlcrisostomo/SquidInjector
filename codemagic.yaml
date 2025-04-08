@@ -2,7 +2,6 @@ workflows:
   SquidInjector:
     name: SquidInjector
     environment:
-      android: true
       vars:
         JAVA_HOME: /opt/java/openjdk-17
     scripts:
