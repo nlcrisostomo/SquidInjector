@@ -1,22 +1,23 @@
 workflows:
-  SquidInjector:
-    name: SquidInjector
-    environment: {}
+  android-workflow:
+    name: SquidInjector Build
+    environment:
+      vars:
+        JAVA_HOME: /opt/android/java/openjdk-17
     scripts:
-      - name: Step 1 - Set correct Java version
-        script: |
-          echo "Setting Java version"
-          export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
-          java -version
-      - name: Step 2 - Prepare gradlew permissions
-        script: |
-          chmod +x gradlew
-      - name: Step 3 - Prepare libs folder and download .so file
-        script: |
-          mkdir -p app/libs
-          curl -L -o app/libs/libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
-      - name: Step 4 - Build APK
-        script: |
-          ./gradlew assembleDebug
+      - echo "Step 1 - Download gradle-wrapper.jar"
+      - mkdir -p gradle/wrapper
+      - curl -L -o gradle/wrapper/gradle-wrapper.jar "https://raw.githubusercontent.com/your-repo-path/gradle-wrapper.jar"
+
+      - echo "Step 2 - Prepare gradlew permissions"
+      - chmod +x ./gradlew
+
+      - echo "Step 3 - Download .so file"
+      - mkdir -p app/libs
+      - curl -L -o app/libs/libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
+
+      - echo "Step 4 - Build APK"
+      - ./gradlew assembleDebug
+
     artifacts:
       - app/build/outputs/**/*.apk
