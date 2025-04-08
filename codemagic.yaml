@@ -2,35 +2,24 @@ workflows:
   SquidInjector:
     name: SquidInjector
     environment:
+      android: true
       vars:
-        SO_FILE_URL: "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
-      java: 11
+        JAVA_HOME: /opt/android/openjdk-17
     scripts:
-      - name: Install Gradle
+      - name: Print environment
         script: |
-          sudo apt-get update
-          sudo apt-get install wget unzip -y
-          wget https://services.gradle.org/distributions/gradle-7.2-bin.zip
-          unzip gradle-7.2-bin.zip
-          export PATH=$PWD/gradle-7.2/bin:$PATH
-          gradle -v
-      - name: Download .so file
+          echo "JAVA_HOME: $JAVA_HOME"
+      - name: Download .so file from Google Drive
         script: |
-          wget -O libil2cpp.so "$SO_FILE_URL"
-      - name: Move .so file to assets
-        script: |
-          mkdir -p app/src/main/assets
-          mv libil2cpp.so app/src/main/assets/
-      - name: Decode gradle-wrapper.jar
-        script: |
-          mkdir -p gradle/wrapper
-          base64 -d gradle/wrapper/gradle-wrapper.jar.base64 > gradle/wrapper/gradle-wrapper.jar
-          chmod +x gradle/wrapper/gradle-wrapper.jar
-      - name: Make gradlew executable
-        script: |
-          chmod +x ./gradlew
+          echo "Downloading libil2cpp.so from Google Drive..."
+          file_id="1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
+          curl -c ./cookie -s -L "https://drive.google.com/uc?export=download&id=${file_id}" > temp.html
+          confirm_code=$(awk '/confirm=/{print $NF}' temp.html | sed 's/.*confirm=.*&amp;.*/\1/')
+          curl -Lb ./cookie "https://drive.google.com/uc?export=download&confirm=${confirm_code}&id=${file_id}" -o app/src/main/jniLibs/armeabi-v7a/libil2cpp.so
+          echo "Download complete!"
       - name: Build APK
         script: |
+          chmod +x ./gradlew
           ./gradlew assembleDebug
     artifacts:
       - app/build/outputs/**/*.apk
