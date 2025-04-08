@@ -11,9 +11,10 @@ workflows:
       - name: Step 2 - Prepare gradlew permissions
         script: |
           chmod +x gradlew
-      - name: Step 3 - Download .so file
+      - name: Step 3 - Prepare libs folder and download .so file
         script: |
-          curl -o app/libs/libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
+          mkdir -p app/libs
+          curl -L -o app/libs/libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
       - name: Step 4 - Build APK
         script: |
           ./gradlew assembleDebug
