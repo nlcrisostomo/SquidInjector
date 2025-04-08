@@ -2,24 +2,24 @@ workflows:
   SquidInjector:
     name: SquidInjector
     environment:
-      android: true
       vars:
-        JAVA_HOME: /opt/android/openjdk-17
+        GOOGLE_DRIVE_SO_URL: "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
     scripts:
-      - name: Print environment
-        script: |
-          echo "JAVA_HOME: $JAVA_HOME"
       - name: Download .so file from Google Drive
         script: |
-          echo "Downloading libil2cpp.so from Google Drive..."
-          file_id="1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
-          curl -c ./cookie -s -L "https://drive.google.com/uc?export=download&id=${file_id}" > temp.html
-          confirm_code=$(awk '/confirm=/{print $NF}' temp.html | sed 's/.*confirm=.*&amp;.*/\1/')
-          curl -Lb ./cookie "https://drive.google.com/uc?export=download&confirm=${confirm_code}&id=${file_id}" -o app/src/main/jniLibs/armeabi-v7a/libil2cpp.so
-          echo "Download complete!"
-      - name: Build APK
+          echo "Downloading .so file from Google Drive"
+          curl -L -o libil2cpp.so "$GOOGLE_DRIVE_SO_URL"
+      - name: Decode gradle-wrapper.jar
+        script: |
+          echo "Decoding gradle-wrapper.jar from base64"
+          mkdir -p gradle/wrapper
+          base64 -d gradle/wrapper/gradle-wrapper.jar.base64 > gradle/wrapper/gradle-wrapper.jar
+          chmod +x gradle/wrapper/gradle-wrapper.jar
+      - name: Set permissions for gradlew
         script: |
           chmod +x ./gradlew
+      - name: Build APK
+        script: |
           ./gradlew assembleDebug
     artifacts:
-      - app/build/outputs/**/*.apk
+      - build/app/outputs/flutter-apk/app-debug.apk
