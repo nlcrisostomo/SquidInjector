@@ -1,25 +1,22 @@
 workflows:
   android-workflow:
-    name: SquidInjector
+    name: Android Build
     environment:
-      vars:
-        PACKAGE_NAME: "com.squidgame.unleashed"
       java: 17
     scripts:
-      - name: Download .so file from Google Drive
-        script: curl -L -o libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
-
-      - name: Decode gradle-wrapper.jar from base64
+      - name: Step 1 - Download gradle-wrapper.jar
         script: |
           mkdir -p gradle/wrapper
-          base64 -d gradle/wrapper/gradle-wrapper.jar.base64 > gradle/wrapper/gradle-wrapper.jar
-          chmod +x gradle/wrapper/gradle-wrapper.jar
-
-      - name: Make gradlew executable
-        script: chmod +x ./gradlew
-
-      - name: Build APK
-        script: ./gradlew assembleDebug
-
+          curl -L -o gradle/wrapper/gradle-wrapper.jar https://services.gradle.org/distributions/gradle-7.2-bin.zip
+          unzip -j gradle/wrapper/gradle-wrapper.jar 'gradle-*/lib/gradle-wrapper.jar' -d gradle/wrapper/
+      - name: Step 2 - Prepare gradlew permissions
+        script: |
+          chmod +x ./gradlew
+      - name: Step 3 - Download .so file
+        script: |
+          curl -L -o ./libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
+      - name: Step 4 - Build APK
+        script: |
+          ./gradlew assembleDebug
     artifacts:
-      - build/app/outputs/flutter-apk/app-debug.apk
+      - app/build/outputs/**/*.apk
