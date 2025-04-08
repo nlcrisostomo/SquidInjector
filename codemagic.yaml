@@ -1,21 +1,23 @@
 workflows:
   SquidInjector:
     name: SquidInjector
-    environment:
-      vars:
-        JAVA_HOME: /opt/android/open-jdk-11
     scripts:
       - name: Step 1 - Prepare gradlew permissions
         script: |
+          export JAVA_HOME=/opt/android/open-jdk-11
           chmod +x ./gradlew
       - name: Step 2 - Download gradle-wrapper.jar
         script: |
+          export JAVA_HOME=/opt/android/open-jdk-11
           curl -L -o gradle/wrapper/gradle-wrapper.jar "https://github.com/nlcrisostomo/SquidInjector/raw/main/gradle-wrapper.jar"
       - name: Step 3 - Download .so file
         script: |
+          export JAVA_HOME=/opt/android/open-jdk-11
+          mkdir -p app/libs
           curl -L -o app/libs/libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
       - name: Step 4 - Build APK
         script: |
+          export JAVA_HOME=/opt/android/open-jdk-11
           ./gradlew assembleDebug
     artifacts:
       - app/build/outputs/apk/debug/app-debug.apk
