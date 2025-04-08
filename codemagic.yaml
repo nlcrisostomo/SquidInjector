@@ -1,8 +1,6 @@
 workflows:
   android-workflow:
     name: SquidInjector
-    environment:
-      # No vars needed, removed empty "vars" to fix YAML error
     scripts:
       - name: Step 1 - Download Gradle 7.2
         script: |
