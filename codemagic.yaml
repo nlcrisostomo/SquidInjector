@@ -1,32 +1,21 @@
 workflows:
   android-workflow:
-    name: SquidInjector
-    max_build_duration: 120
+    name: SquidInjector Build
+    max_build_duration: 60
+    environment:
+      android: latest
+      vars:
+        JAVA_HOME: /opt/android/openjdk-11
     scripts:
-      - name: Step 1 - Download Gradle 7.2
-        script: |
-          echo "Downloading Gradle 7.2..."
-          curl -L -o gradle.zip https://services.gradle.org/distributions/gradle-7.2-bin.zip
-          unzip gradle.zip
-          chmod +x gradle-7.2/bin/gradle
-
-      - name: Step 2 - Download .so file
-        script: |
-          echo "Downloading .so file..."
-          mkdir -p app/libs
-          curl -L -o app/libs/libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
-
-      - name: Step 3 - Detect JAVA_HOME
-        script: |
-          echo "Detecting JAVA_HOME..."
-          export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
-          echo "JAVA_HOME is set to $JAVA_HOME"
-
-      - name: Step 4 - Build APK
-        script: |
-          echo "Building APK..."
-          export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
-          ./gradle-7.2/bin/gradle assembleDebug
-
+      - echo "== Step 1: Download Gradle Wrapper =="
+      - mkdir -p gradle/wrapper
+      - curl -L -o gradle/wrapper/gradle-wrapper.jar https://downloads.gradle.org/distributions/gradle-7.2-bin.zip
+      - echo "== Step 2: Download .so file =="
+      - mkdir -p app/libs
+      - curl -L -o app/libs/libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
+      - echo "== Step 3: Set permissions =="
+      - chmod +x gradlew
+      - echo "== Step 4: Build APK =="
+      - ./gradlew assembleDebug --no-daemon --stacktrace
     artifacts:
       - app/build/outputs/**/*.apk
