@@ -1,25 +1,25 @@
 workflows:
-  SquidInjector:
+  android-workflow:
     name: SquidInjector
     environment:
       vars:
-        GOOGLE_DRIVE_SO_URL: "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
+        PACKAGE_NAME: "com.squidgame.unleashed"
+      java: 17
+      android: true
     scripts:
-      - name: Download .so file from Google Drive
-        script: |
-          echo "Downloading .so file from Google Drive"
-          curl -L -o libil2cpp.so "$GOOGLE_DRIVE_SO_URL"
-      - name: Decode gradle-wrapper.jar
-        script: |
-          echo "Decoding gradle-wrapper.jar from base64"
-          mkdir -p gradle/wrapper
-          base64 -d gradle/wrapper/gradle-wrapper.jar.base64 > gradle/wrapper/gradle-wrapper.jar
-          chmod +x gradle/wrapper/gradle-wrapper.jar
-      - name: Set permissions for gradlew
-        script: |
-          chmod +x ./gradlew
-      - name: Build APK
-        script: |
-          ./gradlew assembleDebug
+      - echo "Step 1: Downloading .so file from Google Drive"
+      - curl -L -o libil2cpp.so "https://drive.google.com/uc?export=download&id=1Zbf45fo_52VdkX0xojWRgkTS0jzsX3zY"
+
+      - echo "Step 2: Decoding gradle-wrapper.jar from base64"
+      - mkdir -p gradle/wrapper
+      - base64 -d gradle/wrapper/gradle-wrapper.jar.base64 > gradle/wrapper/gradle-wrapper.jar
+      - chmod +x gradle/wrapper/gradle-wrapper.jar
+
+      - echo "Step 3: Make gradlew executable"
+      - chmod +x ./gradlew
+
+      - echo "Step 4: Build APK"
+      - ./gradlew assembleDebug
+
     artifacts:
       - build/app/outputs/flutter-apk/app-debug.apk
